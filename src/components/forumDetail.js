@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Like } from '@styled-icons/boxicons-regular/Like';
 import { ThumbLike } from '@styled-icons/fluentui-system-filled/ThumbLike';
+import { useNavigate } from 'react-router-dom';
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 const Wrapper = styled.div`
   display: flex;
   margin-top: 50px;
@@ -46,11 +50,13 @@ const IsLikedBox = styled.div`
 const NoSelLikeBtn = styled(Like)`
   width: 20px;
   color: gray;
+  cursor: pointer;
 `;
 
 //좋아요 눌렀을 떄 아이콘
 const SelLikeBtn = styled(ThumbLike)`
   width: 20px;
+  cursor: pointer;
 `;
 
 const LikeCount = styled.span`
@@ -71,13 +77,14 @@ const ForumTag = styled.div`
   display: inline-block;
   font-size: 0.7rem;
   color: white;
-  background-color: #ff1357;
+  background-color: ${(props) => props.bgColor};
   border-radius: 20px;
   padding: 4px 10px 4px;
   margin-right: 5px;
 `;
 
 const ForumContent = styled.span`
+  width: 100%;
   display: inline-block;
   font-size: 1rem;
   padding-top: 20px;
@@ -85,37 +92,76 @@ const ForumContent = styled.span`
   border-bottom: 1px solid gray;
   line-height: 2;
 `;
-
-const ForumDetail = () => {
+const Delete = styled.button`
+  margin-left: 10px;
+  width: auto;
+  height: 30px;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #dc3545;
+  border: none;
+`;
+const ForumDetail = (props) => {
+  const { detailData, likeToggle, forumDelete } = props;
+  const navigate = useNavigate();
+  console.log(detailData.length || detailData);
+  const confirm = () => {
+    confirmAlert({
+      title: '게시글 삭제',
+      message: '정말로 게시글을 삭제하시겠어요?',
+      buttons: [
+        {
+          label: '네',
+          onClick: () => forumDelete(),
+        },
+        {
+          label: '아니오',
+        },
+      ],
+    });
+  };
   return (
-    <Wrapper>
-      <ForumBox>
-        <BackBtn> {'< '}이전으로 돌아가기</BackBtn>
-        <ListBox>
-          <ContentBox>
-            <Title>질문이 있습니다</Title>
-            <ForumTagBox>
-              <ForumTag>bug</ForumTag>
-              <ForumTag>tip</ForumTag>
-              <ForumTag>general</ForumTag>
-            </ForumTagBox>
-          </ContentBox>
-        </ListBox>
-        <ForumContent>
-          불어 밝은 위하여 커다란 사라지지 새 가진 같은 가는 것이다. 못하다
-          무엇을 용기가 그들은 이것이다. 동산에는 있으며, 바로 이것을 것은 길지
-          인생을 청춘 그들을 끓는다. 피고, 위하여 피에 품었기 속잎나고, 무한한
-          사랑의 말이다. 눈에 못하다 투명하되 우리 인간의 간에 미묘한 영원히
-          아름다우냐? 장식하는 광야에서 보내는 얼음 고행을 긴지라 이것이다.
-          사랑의 더운지라 있음으로써 위하여, 놀이 쓸쓸하랴? 주며, 황금시대를
-          현저하게 있음으로써 꽃 봄바람이다. 청춘의 피가 없는 것은 말이다.
-        </ForumContent>
-        <IsLikedBox>
-          <NoSelLikeBtn></NoSelLikeBtn>
-          <LikeCount>1</LikeCount>
-        </IsLikedBox>
-      </ForumBox>
-    </Wrapper>
+    <>
+      {detailData.length !== 0 && (
+        <Wrapper>
+          <ForumBox>
+            <BackBtn type={'button'} onClick={() => navigate(`/forum`)}>
+              {' '}
+              &lt; 이전으로 돌아가기
+            </BackBtn>
+            <ListBox>
+              <ContentBox>
+                <Title>{detailData.title}</Title>
+                <Delete onClick={() => confirm()}>삭제하기</Delete>
+                {detailData.tag ? (
+                  <ForumTagBox>
+                    <ForumTag bgColor={detailData.tag.color}>
+                      {detailData.tag.name}
+                    </ForumTag>
+                  </ForumTagBox>
+                ) : null}
+              </ContentBox>
+            </ListBox>
+            <ForumContent>{detailData.content}</ForumContent>
+            <IsLikedBox>
+              {detailData.isLiked ? (
+                <SelLikeBtn
+                  onClick={() => {
+                    likeToggle(false);
+                  }}
+                />
+              ) : (
+                <NoSelLikeBtn
+                  onClick={() => {
+                    likeToggle(true);
+                  }}
+                />
+              )}
+            </IsLikedBox>
+          </ForumBox>
+        </Wrapper>
+      )}
+    </>
   );
 };
 

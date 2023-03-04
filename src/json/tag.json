@@ -1,0 +1,20 @@
+{
+  "tagList": [
+    {
+      "name": "general",
+      "value": "general"
+    },
+    {
+      "name": "tip",
+      "value": "tip"
+    },
+    {
+      "name": "bug",
+      "value": "bug"
+    },
+    {
+      "name": "learn",
+      "value": "learn"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Search } from '@styled-icons/bootstrap/Search';
 const Wrapper = styled.div`
@@ -20,7 +21,7 @@ const Title = styled.span`
   height: 40px;
 `;
 const Button = styled.button`
-  width: 90px;
+  width: auto;
   float: right;
   font-size: 0.7rem;
   color: #212529;
@@ -57,8 +58,14 @@ const ListBox = styled.div`
   margin-top: 20px;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
-  @media screen and (max-width: 500px) {
-    height: 20vh;
+  @media screen and (min-width: 1020px) {
+    height: 30vh;
+  }
+  > span {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
   }
 `;
 const ContentBox = styled.div`
@@ -94,47 +101,89 @@ const ForumTagBox = styled.div`
 `;
 
 const ForumTag = styled.div`
+  background-color: ${(props) => props.bgColor};
   display: inline-block;
   font-size: 1.2rem;
   color: white;
-  background-color: #ff1357;
   border-radius: 20px;
   padding: 4px 10px 4px;
   margin-right: 5px;
+  @media screen and (max-width: 500px) {
+    font-size: 0.8rem;
+  }
 `;
-const Forum = () => {
+
+const ResetBtn = styled.button`
+  margin-right: 10px;
+  width: auto;
+  float: right;
+  color: #fff;
+  background-color: #17a2b8;
+  border: none;
+`;
+const Forum = (props) => {
+  const { ListData, SearchClick, Reset } = props;
+  const [searchValue, setSearchValue] = useState(''); //검색어
+  const navigate = useNavigate();
+  const handleSearch = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const forumDetail = (id) => {
+    navigate(`/forum/${id}`);
+  };
   return (
     <Wrapper>
       <ForumBox>
         <Title>묻고 답하기</Title>
-        <Button>+ 새로운 질문</Button>
+
+        <Button type={'button'} onClick={() => navigate(`/forum/write`)}>
+          + 새로운 질문
+        </Button>
+        <ResetBtn
+          onClick={() => {
+            Reset();
+            setSearchValue('');
+          }}
+        >
+          초기화
+        </ResetBtn>
         <Label>
-          <Input type={'search'} placeholder={'검색...'}></Input>
-          <SearchBtn>
+          <Input
+            type={'search'}
+            placeholder={'검색어를 입력해주세요'}
+            onChange={handleSearch}
+            value={searchValue}
+          ></Input>
+          <SearchBtn onClick={() => SearchClick(searchValue)}>
             <BlueSearch></BlueSearch>
           </SearchBtn>
         </Label>
-        <ListBox>
-          <ContentBox>
-            <ForumTitle>질문이 있습니다</ForumTitle>
-            <ForumContent>
-              불어 밝은 위하여 커다란 사라지지 새 가진 같은 가는 것이다. 못하다
-              무엇을 용기가 그들은 이것이다. 동산에는 있으며, 바로 이것을 것은
-              길지 인생을 청춘 그들을 끓는다. 피고, 위하여 피에 품었기 속잎나고,
-              무한한 사랑의 말이다. 눈에 못하다 투명하되 우리 인간의 간에 미묘한
-              영원히 아름다우냐? 장식하는 광야에서 보내는 얼음 고행을 긴지라
-              이것이다. 사랑의 더운지라 있음으로써 위하여, 놀이 쓸쓸하랴? 주며,
-              황금시대를 현저하게 있음으로써 꽃 봄바람이다. 청춘의 피가 없는
-              것은 말이다.
-            </ForumContent>
-            <ForumTagBox>
-              <ForumTag>bug</ForumTag>
-              <ForumTag>tip</ForumTag>
-              <ForumTag>general</ForumTag>
-            </ForumTagBox>
-          </ContentBox>
-          <TimeBox>5시간전</TimeBox>
-        </ListBox>
+
+        {ListData.length > 0 ? (
+          <div>
+            {ListData.map((item, index) => (
+              <ListBox key={index} onClick={() => forumDetail(item.id)}>
+                <ContentBox>
+                  <ForumTitle>{item.title}</ForumTitle>
+                  <ForumContent>{item.content}</ForumContent>
+                  <ForumTagBox>
+                    <ForumTag bgColor={item.tag.color}>
+                      {item.tag.name}
+                    </ForumTag>
+                  </ForumTagBox>
+                </ContentBox>
+                <TimeBox>5시간전</TimeBox>
+              </ListBox>
+            ))}
+          </div>
+        ) : (
+          <div>
+            <ListBox>
+              <span>검색 결과 없음</span>
+            </ListBox>
+          </div>
+        )}
       </ForumBox>
     </Wrapper>
   );

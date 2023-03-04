@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import AiffelLogo from '../images/aiffel_logo.png';
 import Profile from '../images/profile.png';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Headers = styled.header`
   display: flex;
@@ -23,15 +25,17 @@ const LogoImages = styled.img`
 `;
 
 const Nav = styled.nav`
-  width: 120px;
+  width: auto;
   margin-right: 15%;
+  @media screen and (max-width: 500px) {
+    margin-right: 5%;
+  }
 `;
 
 const UL = styled.ul`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
   list-style: none;
   @media screen and (max-width: 500px) {
     width: 90%;
@@ -41,6 +45,8 @@ const UL = styled.ul`
 const LI = styled.li`
   display: flex;
   align-items: center;
+  margin-right: 10px;
+  cursor: pointer;
 `;
 
 const ProfileImages = styled.img`
@@ -55,17 +61,19 @@ const Name = styled.span`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.info);
   return (
     <>
       <Headers>
         <LogoImages src={AiffelLogo} title={'서비스 로고'}></LogoImages>
         <Nav>
-          <UL>
+          <UL onClick={() => navigate('/profile')}>
             <LI>
               <ProfileImages src={Profile}></ProfileImages>
             </LI>
             <LI>
-              <Name>한예지님</Name>
+              <Name>{JSON.parse(user)[0].username}님</Name>
             </LI>
           </UL>
         </Nav>

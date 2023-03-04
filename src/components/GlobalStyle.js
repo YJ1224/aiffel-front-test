@@ -48,7 +48,11 @@ const Common = createGlobalStyle` // [p1] 전역에서 사용할 css 작성
             padding: 0px 2px 1px;
           }
     }
-
+    button:disabled{
+        background: #ccc;
+        border-color:#ccc;
+        cursor:not-allowed;
+    }
 
 `;
 

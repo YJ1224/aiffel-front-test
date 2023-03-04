@@ -1,34 +1,47 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicRoute from './components/publicRoute'; //로그인 전 접근제어
-import PrivateRoute from './components/privateRoute'; //로그인 해야한 접근 가능
-import Header from './components/header';
-import Login from './components/login'; //로그인
-import Forum from './components/forum'; //포럼 목록 컴포넌트
-import ForumWrite from './components/forumWrite'; //포럼 작성 컴포넌트
-import ForumDetail from './components/forumDetail'; //포럼 상세화면 컴포넌트
-import NotFound from './components/notFound'; //없는 경로 노출 시 나오는 페이지
+import PrivateRoute from './components/privateRoute'; //로그인 해야만 접근 가능
 import GlobalStyle from './components/GlobalStyle'; //전역 스타일
-
+import { useSelector } from 'react-redux';
+import Header from './components/header';
+import LoginContainer from './containers/loginContainer'; //로그인
+import ForumContainer from './containers/forumContainer'; //포럼 목록
+import ForumDetailContainer from './containers/forumDetailContainer'; //포러 상세 화면
+import ForumWriteContainer from './containers/forumWriteContainer'; //포럼 작성
+import ProfileContainer from './containers/profileContainer';
+import NotFound from './components/notFound'; //없는 경로 노출 시 나오는 페이지
 const App = () => {
   return (
     <Router>
       <GlobalStyle />
-      <Header />
+      {useSelector((state) => state.user.info).length > 0 && <Header />}
+
       <Routes>
         {/* 로그인 */}
-        <Route path="/" element={<PublicRoute component={<Login />} />} />
-        {/* 서비스 포럼 목록 */}
-        <Route path="/forum" element={<PrivateRoute component={<Forum />} />} />
-        {/* 서비스 포럼 작성 */}
         <Route
-          path="/forum/write"
-          element={<PrivateRoute component={<ForumWrite />} />}
+          path="/"
+          element={<PublicRoute component={<LoginContainer />} />}
+        />
+        {/* 서비스 포럼 목록 */}
+        <Route
+          path="/forum"
+          element={<PrivateRoute component={<ForumContainer />} />}
         />
         {/* 서비스 포럼 상세 */}
         <Route
           path="/forum/:id"
-          element={<PrivateRoute component={<ForumDetail />} />}
+          element={<PrivateRoute component={<ForumDetailContainer />} />}
+        />
+        {/* 서비스 포럼 작성 */}
+        <Route
+          path="/forum/write"
+          element={<PrivateRoute component={<ForumWriteContainer />} />}
+        />
+        {/* 프로필 조회 & 수정 ?*/}
+        <Route
+          path="/profile"
+          element={<PrivateRoute component={<ProfileContainer />} />}
         />
         {/* 없는 경로시 에러페이지 */}
         <Route path={'*'} element={<NotFound />} />
