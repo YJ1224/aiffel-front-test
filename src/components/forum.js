@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Search } from '@styled-icons/bootstrap/Search';
+
+import Button from '../common/button'; //버튼 공통 컴포넌트
+import Input from '../common/input'; //input 공통 컴포넌트
 const Wrapper = styled.div`
   display: flex;
   margin-top: 50px;
@@ -20,33 +23,9 @@ const Title = styled.span`
   font-size: 1.6rem;
   height: 40px;
 `;
-const Button = styled.button`
-  width: auto;
-  float: right;
-  font-size: 0.7rem;
-  color: #212529;
-  background-color: #007bff;
-  border: 1px solid #007bff;
-`;
-
 const Label = styled.label`
   position: relative;
 `;
-const Input = styled.input`
-  dispaly: none;
-  margin-top: 20px;
-`;
-const SearchBtn = styled.button`
-  border: none;
-  background-color: white;
-  width: auto;
-  height: auto;
-  margin-top: 60px;
-  position: absolute;
-  top: 0px;
-  right: 5px;
-`;
-
 const BlueSearch = styled(Search)`
   width: 15px;
   color: #007bff;
@@ -113,13 +92,9 @@ const ForumTag = styled.div`
   }
 `;
 
-const ResetBtn = styled.button`
-  margin-right: 10px;
-  width: auto;
-  float: right;
-  color: #fff;
-  background-color: #17a2b8;
-  border: none;
+const ButtonBox = styled.div`
+  display: inline-block;
+  width: 100%;
 `;
 const Forum = (props) => {
   const { ListData, SearchClick, Reset } = props;
@@ -136,28 +111,45 @@ const Forum = (props) => {
     <Wrapper>
       <ForumBox>
         <Title>묻고 답하기</Title>
+        <ButtonBox>
+          <Button
+            type={'button'}
+            label={' + 새로운 질문'}
+            disabled={false}
+            size={'sm'}
+            variant={'newQuestion'}
+            onClick={() => {
+              navigate(`/forum/write`);
+            }}
+          ></Button>
+          <Button
+            type={'button'}
+            label={'초기화'}
+            disabled={false}
+            size={'sm'}
+            variant={'reset'}
+            onClick={() => {
+              Reset();
+              setSearchValue('');
+            }}
+          ></Button>
+        </ButtonBox>
 
-        <Button type={'button'} onClick={() => navigate(`/forum/write`)}>
-          + 새로운 질문
-        </Button>
-        <ResetBtn
-          onClick={() => {
-            Reset();
-            setSearchValue('');
-          }}
-        >
-          초기화
-        </ResetBtn>
         <Label>
           <Input
             type={'search'}
             placeholder={'검색어를 입력해주세요'}
-            onChange={handleSearch}
+            onChangeFunc={handleSearch}
             value={searchValue}
           ></Input>
-          <SearchBtn onClick={() => SearchClick(searchValue)}>
-            <BlueSearch></BlueSearch>
-          </SearchBtn>
+          <Button
+            disabled={false}
+            variant={'search'}
+            label={<BlueSearch />}
+            onClick={() => {
+              SearchClick(searchValue);
+            }}
+          ></Button>
         </Label>
 
         {ListData.length > 0 ? (

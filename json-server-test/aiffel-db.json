@@ -164,6 +164,39 @@
         "color": "#ff1357"
       },
       "id": 15
+    },
+    {
+      "title": "졸려요...",
+      "tagValue": "general",
+      "content": "네 졸려요....",
+      "isLiked": false,
+      "tag": {
+        "name": "general",
+        "color": "#ff1357"
+      },
+      "id": 16
+    },
+    {
+      "title": "질문 테스트",
+      "tagValue": "general",
+      "content": "질문테스트",
+      "isLiked": false,
+      "tag": {
+        "name": "general",
+        "color": "#ff1357"
+      },
+      "id": 17
+    },
+    {
+      "title": "공통컴포넌트",
+      "tagValue": "general",
+      "content": "공통컴포넌트 테스트?????",
+      "isLiked": false,
+      "tag": {
+        "name": "general",
+        "color": "#ff1357"
+      },
+      "id": 18
     }
   ],
   "users": [

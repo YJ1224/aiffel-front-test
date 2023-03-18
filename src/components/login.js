@@ -1,13 +1,13 @@
 import React, { useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
-
+import Button from '../common/button'; //버튼 공통 컴포넌트
+import Input from '../common/input'; //input 공통 컴포넌트
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 `;
-//calc
 const LoginBox = styled.div`
   width: 50vw;
   height: 70vh;
@@ -33,15 +33,6 @@ const Explanation = styled.div`
   @media screen and (max-width: 500px) {
     font-size: 0.7rem;
   }
-`;
-
-const Input = styled.input`
-  border: 1px solid #ffc107;
-`;
-const Button = styled.button`
-  color: #212529;
-  background-color: #ffc107;
-  border: 1px solid #ffc107;
 `;
 const Password = styled.div`
   font-size: 1em;
@@ -70,7 +61,6 @@ const Login = (props) => {
 
   const [isEmail, setIsEmail] = useState(false); //이메일 유효성 검사 결과
   const [isPassword, setIsPassword] = useState(false); //패스워드 유효성 검사 결과
-
   //이메일 유효성 체크
   const emailValidation = (e) => {
     setEmail(e.target.value);
@@ -100,8 +90,9 @@ const Login = (props) => {
           <Input
             type={'email'}
             placeholder={'이메일 주소'}
-            onChange={emailValidation}
-          ></Input>
+            border={'1px solid #ffc107'}
+            onChangeFunc={emailValidation}
+          />
           {email.length > 0 && !isEmail && (
             <ErrorMessage>이메일을 확인해주세요.</ErrorMessage>
           )}
@@ -109,7 +100,8 @@ const Login = (props) => {
           <Input
             type={'password'}
             placeholder={'비밀번호 10자리 이상'}
-            onChange={passWordValidation}
+            border={'1px solid #ffc107'}
+            onChangeFunc={passWordValidation}
           ></Input>
           {password.length > 0 && !isPassword && (
             <ErrorMessage>비밀번호는 8자리 이상 입력해주세요.</ErrorMessage>
@@ -119,12 +111,14 @@ const Login = (props) => {
             <a href="/findPassword">비밀번호 찾기</a>
           </Password>
           <Button
+            label={'로그인'}
             disabled={!isEmail || !isPassword}
-            type="button"
-            onClick={() => handleLoginFunc(email, password)}
-          >
-            로그인
-          </Button>
+            size={'full'}
+            variant={'login'}
+            onClick={() => {
+              handleLoginFunc(email, password);
+            }}
+          ></Button>
         </LoginBox>
       </Wrapper>
     </>

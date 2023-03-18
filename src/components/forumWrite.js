@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Tags from '../json/tag.json';
+import Button from '../common/button'; //버튼 공통 컴포넌트
+import Input from '../common/input'; //input 공통 컴포넌트
+import Select from '../common/select'; //select 공통 컴포넌트
+import TextArea from '../common/textarea'; // textarea 공통 컴포넌트
+import Tags from '../json/tag.json'; //태그 JSON 파일
 const Wrapper = styled.div`
   display: flex;
   margin-top: 50px;
@@ -36,40 +41,31 @@ const Label = styled.label`
 `;
 
 const BtnGroup = styled.label`
-  display: inline-block;
+  display: flex;
   width: 100%;
   text-align: center;
+  justify-content: center;
   > button {
     width: 45%;
     margin-top: 20px;
   }
 `;
 
-const WriteBtn = styled.button`
-  background-color: #28a745;
-  border: none;
-  margin-right: 10px;
-`;
-
-const CancelBtn = styled.button`
-  color: #fff;
-  background-color: #6c757d;
-  border: none;
-`;
-
 const ForumWrite = (props) => {
   const [title, setTitle] = useState(''); //제목
-  const [tagValue, setTagVlue] = useState(Tags.tagList[0].value); //태그
+  const [tagValue, setTagValue] = useState(''); //태그
   const [content, setContent] = useState(''); //내용
 
   const { forumFunc } = props;
+  const navigate = useNavigate();
   //제목 change
   const handleTitle = (e) => {
     setTitle(e.target.value);
   };
   //셀렉트 change
   const handleSelect = (e) => {
-    setTagVlue(e.target.value);
+    setTagValue(e.target.value);
+    console.log(tagValue);
   };
   //내용 change
   const handleContent = (e) => {
@@ -82,42 +78,49 @@ const ForumWrite = (props) => {
           <Title>질문하기</Title>
           <FormLabelGroup>
             <Label htmlFor="forumTitle">질문 제목</Label>
-            <input
-              id="forumTitle"
-              type="text"
-              placeholder="ex. 질문이 있습니다."
-              onChange={handleTitle}
+            <Input
+              type={'text'}
+              placeholder={'ex. 질문이 있습니다.'}
+              onChangeFunc={handleTitle}
             />
           </FormLabelGroup>
           <FormLabelGroup>
             <Label htmlFor="forumTags">분류</Label>
-            <select id="forumTags" onChange={handleSelect} value={tagValue}>
-              {Tags.tagList.map((item, index) => {
-                return (
-                  <option key={index} value={item.value}>
-                    {item.value}
-                  </option>
-                );
-              })}
-            </select>
+            <Select
+              id={'forumTags'}
+              onChangeFunc={handleSelect}
+              tagValue={tagValue}
+              Tags={Tags}
+            ></Select>
           </FormLabelGroup>
           <FormLabelGroup>
             <Label htmlFor="forumContent">질문 내용</Label>
-            <textarea
-              id="forumContent"
-              placeholder="ex)질문내용~"
-              onChange={handleContent}
+            <TextArea
+              id={'forumContent'}
+              placeholder={'ex)질문내용~'}
+              onChangeFunc={handleContent}
             />
           </FormLabelGroup>
           <BtnGroup>
-            <WriteBtn
-              type="button"
+            <Button
+              type={'button'}
               disabled={!title || !tagValue || !content}
-              onClick={() => forumFunc(title, tagValue, content)}
-            >
-              등록하기
-            </WriteBtn>
-            <CancelBtn>포럼목록 가기</CancelBtn>
+              label={'등록하기'}
+              size={'group'}
+              variant={'write'}
+              onClick={() => {
+                forumFunc(title, tagValue, content);
+              }}
+            ></Button>
+            <Button
+              type={'button'}
+              label={'포럼목록 가기'}
+              size={'group'}
+              variant={'forumMove'}
+              onClick={() => {
+                navigate(`/forum`);
+              }}
+            />
           </BtnGroup>
         </ForumBox>
       </Wrapper>
