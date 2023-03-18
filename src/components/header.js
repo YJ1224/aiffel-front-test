@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import AiffelLogo from '../images/aiffel_logo.png';
 import Profile from '../images/profile.png';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { userLogout } from '../store/module/login';
 const Headers = styled.header`
   display: flex;
   justify-content: space-between;
@@ -60,21 +60,34 @@ const Name = styled.span`
   font-size: 1em;
 `;
 
+const ProfileBox = styled.div`
+  display: flex;
+`;
 const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.info);
+  const dispatch = useDispatch();
+  //로그아웃
+  const handelLogout = async () => {
+    await dispatch(userLogout());
+    alert('로그아웃 되었습니다😎');
+  };
   return (
     <>
       <Headers>
         <LogoImages src={AiffelLogo} title={'서비스 로고'}></LogoImages>
         <Nav>
-          <UL onClick={() => navigate('/profile')}>
-            <LI>
-              <ProfileImages src={Profile}></ProfileImages>
-            </LI>
-            <LI>
-              <Name>{JSON.parse(user)[0].username}님</Name>
-            </LI>
+          <UL>
+            <ProfileBox onClick={() => navigate('/profile')}>
+              <LI>
+                <ProfileImages src={Profile}></ProfileImages>
+              </LI>
+              <LI>
+                <Name>{JSON.parse(user)[0].username}님</Name>
+              </LI>
+            </ProfileBox>
+
+            <LI onClick={handelLogout}>로그아웃</LI>
           </UL>
         </Nav>
       </Headers>

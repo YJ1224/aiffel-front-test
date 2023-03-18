@@ -4,11 +4,9 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const PrivateRoute = ({ component: Component }) => {
   const user = useSelector((state) => state.user.info);
-  return user.length > 0 ? (
-    Component
-  ) : (
-    <Navigate to="/" {...alert('로그인 후 이용가능')} />
-  );
+  //{...alert('로그인 후 이용가능')}
+  console.log(user);
+  return user.length > 0 ? Component : <Navigate to="/" />;
 };
 
 export default PrivateRoute;
