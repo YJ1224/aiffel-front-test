@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicRoute from './route/publicRoute'; //로그인 전 접근제어
 import PrivateRoute from './route/privateRoute'; //로그인 해야만 접근 가능
 
-import GlobalStyle from './components/GlobalStyle'; //전역 스타일
 import { useSelector } from 'react-redux';
 
 //Containers Component
@@ -21,7 +20,6 @@ import NotFound from './components/notFound'; //없는 경로 노출 시 나오�
 const App = () => {
   return (
     <Router>
-      <GlobalStyle />
       {useSelector((state) => state.user.info).length > 0 && <Header />}
 
       <Routes>

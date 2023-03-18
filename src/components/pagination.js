@@ -1,78 +1,84 @@
 import React from 'react';
 import styled from 'styled-components';
+import PaginationLib from 'react-js-pagination'; //pagination 라이브러리 사용
+
 const Div = styled.div`
   display: flex;
+  width: 100%;
   justify-content: center;
-  align-items: center;
-  gap: 4px;
-  margin: 16px;
-`;
-const Nav = styled.nav`
-  display: flex;
-  width: 70vw;
-  height: auto;
-  justify-content: center;
-`;
-
-const Button = styled.button`
-  width: 50px;
-  border: none;
-  border-radius: 20px;
-  padding: 8px;
-  margin: 0 10px; 0 10px;
-  background: black;
-  color: white;
-  font-size: 1rem;
-
-  &:hover {
-    background: tomato;
-    cursor: pointer;
-    transform: translateY(-2px);
+  &.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
   }
 
-  &[disabled] {
-    background: grey;
-    cursor: revert;
-    transform: revert;
+  ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
   }
 
-  &[aria-current] {
-    background: deeppink;
-    font-weight: bold;
-    cursor: revert;
-    transform: revert;
+  ul.pagination li {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e2e2e2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    border-radius: 20px;
+    margin-left: 10px;
+  }
+
+  ul.pagination li:first-child {
+    border-radius: 20px;
+  }
+
+  ul.pagination li:last-child {
+    border-radius: 20px;
+  }
+
+  ul.pagination li a {
+    text-decoration: none;
+    color: #337ab7;
+    font-size: 1rem;
+  }
+
+  ul.pagination li.active a {
+    color: white;
+  }
+
+  ul.pagination li.active {
+    background-color: #337ab7;
+  }
+
+  ul.pagination li a:hover,
+  ul.pagination li a.active {
+    color: blue;
+  }
+
+  &.page-selection {
+    width: 48px;
+    height: 30px;
+    color: #337ab7;
   }
 `;
 const Pageination = (props) => {
   const { totalCount, limit, page, setPage } = props;
-  const pageNumber = Math.ceil(totalCount / limit);
   return (
     <>
       {totalCount > 0 && (
         <Div>
-          <Nav>
-            <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
-              &lt;
-            </Button>
-            {pageNumber &&
-              Array(pageNumber)
-                .fill()
-                .map((_, i) => (
-                  <Button
-                    key={i + 1}
-                    onClick={() => setPage(i + 1)}
-                    aria-current={page === i + 1 ? 'page' : null}
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-            <Button
-              onClick={() => setPage(page + 1)}
-              disabled={page === pageNumber}
-            >
-              &gt;
-            </Button>
-          </Nav>
+          <PaginationLib
+            activePage={page}
+            itemsCountPerPage={limit}
+            totalItemsCount={totalCount}
+            pageRangeDisplayed={5}
+            prevPageText={'‹'}
+            nextPageText={'›'}
+            onChange={setPage}
+          ></PaginationLib>
         </Div>
       )}
     </>

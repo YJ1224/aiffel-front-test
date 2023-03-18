@@ -6,22 +6,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import Button from '../common/button'; //버튼 공통 컴포넌트
 const Wrapper = styled.div`
   display: flex;
   margin-top: 50px;
   justify-content: center;
   align-items: center;
 `;
-const BackBtn = styled.button`
-  display: block;
-  width: 40%;
-  background-color: #e9e9e9;
-  color: #0000cd;
-  border: 1px solid #e9e9e9;
-  @media screen and (max-width: 500px) {
-    width: 60%;
-  }
-`;
+
 const ForumBox = styled.div`
   width: 70vw;
   height: 100vh;
@@ -101,6 +93,11 @@ const Delete = styled.button`
   background-color: #dc3545;
   border: none;
 `;
+
+const ButtonBox = styled.div`
+  display: flex;
+  width: 100%;
+`;
 const ForumDetail = (props) => {
   const { detailData, likeToggle, forumDelete } = props;
   const navigate = useNavigate();
@@ -125,10 +122,18 @@ const ForumDetail = (props) => {
       {detailData.length !== 0 && (
         <Wrapper>
           <ForumBox>
-            <BackBtn type={'button'} onClick={() => navigate(`/forum`)}>
-              {' '}
-              &lt; 이전으로 돌아가기
-            </BackBtn>
+            <ButtonBox>
+              <Button
+                type={'button'}
+                disabled={false}
+                label={'이전으로 돌아가기'}
+                onClick={() => {
+                  navigate(`/forum`);
+                }}
+                variant={'backMove'}
+              ></Button>
+            </ButtonBox>
+
             <ListBox>
               <ContentBox>
                 <Title>{detailData.title}</Title>

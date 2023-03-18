@@ -69,6 +69,16 @@ const VARIANTS = {
     --button-bg-color: #6c757d;
     --button-border: 1px solid #6c757d;
   `,
+  backMove: `
+    --button-display: block;
+    --button-width: 40%;
+    --button-bg-color: #e9e9e9;
+    --button-color: #0000cd;
+    --button-border: 1px solid #e9e9e9;
+    @media screen and (max-width: 500px) {
+      --button-width: 60%;
+    }
+  `,
 };
 
 const ClickBtn = styled.button`
@@ -90,6 +100,12 @@ const ClickBtn = styled.button`
   white-space: nowrap;
   box-sizing: border-box;
   cursor: pointer;
+
+  :disabled {
+    background: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+  }
 `;
 const Button = (props) => {
   //label : 버튼명
